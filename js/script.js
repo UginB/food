@@ -448,7 +448,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // });
 
 
-    
+
     //dots
 
     const carousel = document.querySelector('.offer__slider-wrapper');
@@ -486,9 +486,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
-
-
 
 
 
