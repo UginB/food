@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getZero(num) {
-        if (num >= 0 && num <= 10) {
+        if (num >= 0 && num < 10) {
             return `0${num}`;
         } else {
             return num;
@@ -88,21 +88,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.querySelector('.modal'),
           btn = document.querySelectorAll('[data-modal]'),
           close = document.querySelector('[data-close]'),
-          body = document.querySelector('body');
+          body = document.querySelector('body'),
+          bodyWidth = body.offsetWidth;
 
-    const closeModal = () => {
+    function closeModal() {
         modal.style.display = 'none';
         body.style.paddingRight = `0`;
         body.style.overflow = 'auto';
-    };
+    }
 
-    let bodyWidth = body.offsetWidth;
+    function openModal() {
+        modal.style.display = 'block';
+        body.style.overflow = 'hidden';
+        body.style.paddingRight = `${body.clientWidth - bodyWidth}px`;
+        // clearInterval(modalTimer);
+    }
+
+    // const modalTimer = setTimeout(openModal, 5000);
+
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+ 
+    window.addEventListener('scroll', showModalByScroll);
+
+    
 
     btn.forEach(item => {
         item.addEventListener('click', () => {
-            modal.style.display = 'block';
-            body.style.overflow = 'hidden';
-            body.style.paddingRight = `${body.clientWidth - bodyWidth}px`
+            openModal();
         });
     });
 
@@ -111,4 +128,46 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }
     });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code == 'Escape' && modal.style.display == 'block') {
+            closeModal();
+        }
+    });
+
+    // cards
+
+    const menu = document.querySelector('.menu__field').firstElementChild;
+
+    class Card {
+        constructor(parent, img, alt, subtitle, descr, total) {
+            this.parent = parent;
+            this.img = img;
+            this.alt = alt;
+            this.subtitle = subtitle;
+            this.descr = descr;
+            this.total = total;
+        }
+
+        render() {
+            this.parent.innerHTML+=`
+                <div class="menu__item">
+                    <img src=${this.img} alt=${this.alt}>
+                    <h3 class="menu__item-subtitle">${this.subtitle}</h3>
+                    <div class="menu__item-descr">${this.descr}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.total}</span> грн/день</div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    new Card(menu, "img/tabs/vegy.jpg", "vegy", 'Меню "Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 229).render();
+
+    new Card(menu, "img/tabs/elite.jpg", "elite",'Меню “Премиум”', 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!', 550).render();
+
+    new Card(menu, "img/tabs/post.jpg", "post", 'Меню "Постное"', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 430).render();
 });
