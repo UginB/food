@@ -174,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const modal = document.querySelector('.modal'),
         btn = document.querySelectorAll('[data-modal]'),
-        close = document.querySelector('[data-close]'),
         body = document.querySelector('body'),
         bodyWidth = body.offsetWidth;
 
@@ -188,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'block';
     body.style.overflow = 'hidden';
     body.style.paddingRight = `${body.clientWidth - bodyWidth}px`; // clearInterval(modalTimer);
-  } // const modalTimer = setTimeout(openModal, 5000);
+  } // const modalTimer = setTimeout(openModal, 50000);
 
 
   function showModalByScroll() {
@@ -205,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   modal.addEventListener('click', e => {
-    if (e.target == modal || e.target == close) {
+    if (e.target == modal || e.target.classList.contains('modal__close')) {
       closeModal();
     }
   });
@@ -255,7 +254,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
   new Card('.menu .container', "img/tabs/vegy.jpg", "vegy", 'Меню "Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 229).render();
   new Card('.menu .container', "img/tabs/elite.jpg", "elite", 'Меню “Премиум”', 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!', 550).render();
-  new Card('.menu .container', "img/tabs/post.jpg", "post", 'Меню "Постное"', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 430).render();
+  new Card('.menu .container', "img/tabs/post.jpg", "post", 'Меню "Постное"', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 430).render(); //forms
+
+  const forms = document.querySelectorAll('form');
+  const message = {
+    loading: 'img/form/spinner.svg',
+    success: 'Спасибо! Скоро мы с Вами свяжемся',
+    failure: 'Что-то пошло не так...'
+  };
+  forms.forEach(item => postData(item));
+
+  function postData(form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const statusMessage = document.createElement('img');
+      statusMessage.src = message.loading;
+      statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+      form.isertAdjacentElement('afterend', statusMessage);
+      const request = new XMLHttpRequest();
+      request.open('POST', 'server.php');
+      request.setRequestHeader('Content-type', 'application/json'); //обязательно только для JSON
+
+      const formData = new FormData(form);
+      const object = {}; //только для JSON
+
+      formData.forEach((value, key) => {
+        //только для JSON  
+        object[key] = value; //только для JSON
+      });
+      const json = JSON.stringify(object); //только для JSON
+
+      request.send(json);
+      request.addEventListener('load', () => {
+        if (request.status === 200) {
+          console.log(request.response);
+          showThanksModal(message.success);
+          form.reset();
+          statusMessage.remove();
+        } else {
+          showThanksModal(message.failure);
+        }
+      });
+    });
+  }
+
+  function showThanksModal(message) {
+    const prevModalDialog = document.querySelector('.modal__dialog');
+    prevModalDialog.style.display = 'none';
+    openModal();
+    const thanksModal = document.createElement('div');
+    thanksModal.classList.add('modal__dialog');
+    thanksModal.innerHTML = `
+            <div class='modal__content'>
+                <div class='modal__close' data-close>×</div>
+                <div class='modal__title'>${message}</div>
+            </div>
+        `;
+    document.querySelector('.modal').append(thanksModal);
+    setTimeout(() => {
+      thanksModal.remove();
+      prevModalDialog.style.display = 'block';
+      closeModal();
+    }, 4000);
+  }
 });
 
 /***/ })
