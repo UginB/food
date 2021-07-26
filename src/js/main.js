@@ -293,4 +293,88 @@ document.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000 );
     }
+
+
+    //slider
+
+    const slides = document.querySelectorAll('.offer__slide'),
+          currentNum = document.querySelector('#current'),
+          totalNum = document.querySelector('#total'),
+          prevBtn = document.querySelector('.offer__slider-prev'),
+          nextBtn = document.querySelector('.offer__slider-next');
+    let index = 0;
+
+    function refreshNumber() {
+
+        if (index >= slides.length) {
+            index = 0;
+        } else if (index < 0) {
+            index = slides.length-1;
+        }
+
+
+        (slides.length < 10) ? totalNum.innerHTML = `0${slides.length}`: totalNum.innerHTML = slides.length;
+        (index < 10) ? currentNum.innerHTML = `0${index+1}` : currentNum.innerHTML = index;
+        if (index == slides.length) {
+            currentNum.innerHTML = `0${index}`
+        }
+    }
+
+    // function refreshSlide() {
+    //     slides.forEach((slide, i) => {
+    //         (i == index) ? slide.style.display = 'block' : slide.style.display = 'none';
+    //     });
+    // }
+
+    refreshNumber();
+    // refreshSlide();
+
+    // nextBtn.addEventListener('click', () => {
+    //     index++;
+    //     refreshSlide();
+    //     refreshNumber();
+    // });
+
+    // prevBtn.addEventListener('click', () => {
+    //     index--;
+    //     refreshSlide();
+    //     refreshNumber();
+    // });
+
+    document.querySelector('.offer__slider-wrapper').style.overflow = 'hidden';
+    const sliderInner = document.querySelector('.offer__slider-inner');
+
+    sliderInner.style.cssText = `
+        display: flex;
+        width: ${slides.length*100}%;
+        transition: .5s all;
+    `;
+
+    let transformCount = 0;
+
+    nextBtn.addEventListener('click', () => {
+        index++;
+        if (index >= slides.length) {
+            transformCount = 0;
+            sliderInner.style.transform = `translateX(${transformCount}%)`;
+        } else {
+            transformCount-=25;
+            sliderInner.style.transform = `translateX(${transformCount}%)`}
+        refreshNumber();
+        console.log(index);
+    });
+
+    prevBtn.addEventListener('click', () => {
+        index--;
+        if (index < 0) {
+            transformCount = -75;
+            sliderInner.style.transform = `translateX(${transformCount}%)`;
+        } else {
+            transformCount+=25
+            sliderInner.style.transform = `translateX(${transformCount}%`}
+        refreshNumber();
+        
+        console.log(index);
+    });
+
 });
