@@ -1785,7 +1785,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     refreshNumber();
-    console.log(index);
+    refreshDots();
   });
   prevBtn.addEventListener('click', () => {
     index--;
@@ -1799,8 +1799,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     refreshNumber();
-    console.log(index);
+    refreshDots();
+  }); //dots
+
+  const sliderSection = document.querySelector('.offer__slider'),
+        dotsWrapper = document.createElement('div');
+  dotsWrapper.classList.add('carousel-indicators');
+  sliderSection.style.position = 'relative';
+  sliderSection.append(dotsWrapper);
+
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    dotsWrapper.append(dot);
+    i == 0 ? dot.style.opacity = '1' : dot.style.opacity = '.5';
+  }
+
+  document.querySelectorAll('.dot').forEach(dot => {
+    dot.addEventListener('click', e => {});
   });
+
+  function refreshDots() {
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+      i == index ? dot.style.opacity = '1' : dot.style.opacity = '.5';
+    });
+  }
 });
 
 /***/ })
