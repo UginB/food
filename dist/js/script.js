@@ -1730,8 +1730,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentNum = document.querySelector('#current'),
         totalNum = document.querySelector('#total'),
         prevBtn = document.querySelector('.offer__slider-prev'),
-        nextBtn = document.querySelector('.offer__slider-next');
-  let index = 0;
+        nextBtn = document.querySelector('.offer__slider-next'),
+        sliderSection = document.querySelector('.offer__slider'),
+        dotsWrapper = document.createElement('div');
+  let index = 0,
+      transformCount = 0;
 
   function refreshNumber() {
     if (index >= slides.length) {
@@ -1746,14 +1749,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (index == slides.length) {
       currentNum.innerHTML = `0${index}`;
     }
+  }
+
+  refreshNumber();
+
+  function refreshDots() {
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+      i == index ? dot.style.opacity = '1' : dot.style.opacity = '.5';
+    });
   } // function refreshSlide() {
   //     slides.forEach((slide, i) => {
   //         (i == index) ? slide.style.display = 'block' : slide.style.display = 'none';
   //     });
   // }
-
-
-  refreshNumber(); // refreshSlide();
+  // refreshSlide();
   // nextBtn.addEventListener('click', () => {
   //     index++;
   //     refreshSlide();
@@ -1765,6 +1774,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //     refreshNumber();
   // });
 
+
   document.querySelector('.offer__slider-wrapper').style.overflow = 'hidden';
   const sliderInner = document.querySelector('.offer__slider-inner');
   sliderInner.style.cssText = `
@@ -1772,7 +1782,6 @@ document.addEventListener('DOMContentLoaded', () => {
         width: ${slides.length * 100}%;
         transition: .5s all;
     `;
-  let transformCount = 0;
   nextBtn.addEventListener('click', () => {
     index++;
 
@@ -1802,8 +1811,6 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshDots();
   }); //dots
 
-  const sliderSection = document.querySelector('.offer__slider'),
-        dotsWrapper = document.createElement('div');
   dotsWrapper.classList.add('carousel-indicators');
   sliderSection.style.position = 'relative';
   sliderSection.append(dotsWrapper);
@@ -1815,15 +1822,15 @@ document.addEventListener('DOMContentLoaded', () => {
     i == 0 ? dot.style.opacity = '1' : dot.style.opacity = '.5';
   }
 
-  document.querySelectorAll('.dot').forEach(dot => {
-    dot.addEventListener('click', e => {});
-  });
-
-  function refreshDots() {
-    document.querySelectorAll('.dot').forEach((dot, i) => {
-      i == index ? dot.style.opacity = '1' : dot.style.opacity = '.5';
+  document.querySelectorAll('.dot').forEach((dot, i) => {
+    dot.addEventListener('click', e => {
+      transformCount = -25;
+      sliderInner.style.transform = `translateX(${transformCount * i}%`;
+      index = i;
+      refreshDots();
+      refreshNumber();
     });
-  }
+  });
 });
 
 /***/ })
