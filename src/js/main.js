@@ -430,7 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const elements = document.querySelectorAll(selector);
 
         elements.forEach(elem => {
-            if (elem.getAttribute('id'===localStorage.getItem('sex'))) {
+            elem.classList.remove(activeClass);
+            if (elem.getAttribute('id') === localStorage.getItem('sex')) {
                 elem.classList.add(activeClass);
             }
 
@@ -459,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
     calcTotal();
 
     function getStaticInform(selector, activeClass) {
-        const elements = document.querySelectorAll(`${selector} div`);
+        const elements = document.querySelectorAll(selector);
 
         elements.forEach(elem => {
             elem.addEventListener('click', (e) => {
