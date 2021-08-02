@@ -1,29 +1,32 @@
-function modal() {
-    //modal
+function closeModal(modalSelector) {
+    const modal = document.querySelector(modalSelector),
+          body = document.querySelector('body');
+    modal.style.display = 'none';
+    body.style.paddingRight = `0`;
+    body.style.overflow = 'auto';
+}
 
-    const modal = document.querySelector('.modal'),
-          btn = document.querySelectorAll('[data-modal]'),
+function openModal(modalSelector, modalTimer) {
+    const modal = document.querySelector(modalSelector),
           body = document.querySelector('body'),
           bodyWidth = body.offsetWidth;
-
-    function closeModal() {
-        modal.style.display = 'none';
-        body.style.paddingRight = `0`;
-        body.style.overflow = 'auto';
+    modal.style.display = 'block';
+    body.style.overflow = 'hidden';
+    body.style.paddingRight = `${body.clientWidth - bodyWidth}px`;
+    if (modalTimer) {
+        clearInterval(modalTimer);
     }
+}
 
-    function openModal() {
-        modal.style.display = 'block';
-        body.style.overflow = 'hidden';
-        body.style.paddingRight = `${body.clientWidth - bodyWidth}px`;
-        // clearInterval(modalTimer);
-    }
+function modal(triggerSelector, modalSelector, modalTimer) {
+    //modal
 
-    // const modalTimer = setTimeout(openModal, 50000);
+    const modal = document.querySelector(modalSelector),
+          btn = document.querySelectorAll(triggerSelector);
 
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-            openModal();
+            openModal(modalSelector, modalTimer);
             window.removeEventListener('scroll', showModalByScroll);
         }
     }
@@ -32,21 +35,22 @@ function modal() {
 
     btn.forEach(item => {
         item.addEventListener('click', () => {
-            openModal();
+            openModal(modalSelector, modalTimer);
         });
     });
 
     modal.addEventListener('click', (e) => {
         if (e.target == modal || e.target.classList.contains('modal__close')) {
-            closeModal();
+            closeModal(modalSelector);
         }
     });
 
     document.addEventListener('keydown', (e) => {
         if (e.code == 'Escape' && modal.style.display == 'block') {
-            closeModal();
+            closeModal(modalSelector);
         }
     });
 }
 
-module.exports = modal;
+export default modal;
+export {openModal, closeModal}
