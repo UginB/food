@@ -11,7 +11,7 @@ function forms(formSelector, modalTimer) {
         failure: 'Что-то пошло не так...'
     };
 
-    forms.forEach(item => postData(item));
+    forms.forEach(item => bindPostData(item));
 
     // function postData(form) {
     //     form.addEventListener('submit', (e) => {
@@ -53,7 +53,19 @@ function forms(formSelector, modalTimer) {
     //     });
     // }
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+        })
+
+        return await res.json();
+    }
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -67,18 +79,21 @@ function forms(formSelector, modalTimer) {
 
             const formData = new FormData(form);
 
-            const object = {};                                 //только для JSON
-            formData.forEach((value, key) => {                 //только для JSON  
-                object[key] = value;                           //только для JSON
-            });
+            // const object = {};                                 //только для JSON
+            // formData.forEach((value, key) => {                 //только для JSON  
+            //     object[key] = value;                           //только для JSON
+            // });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            fetch('server.php', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'  //только для JSON
-                },
-                body: JSON.stringify(object) // или formData
-            }).then(data => data.text())
+            postData('http://localhost:3000/requests', json)
+            // fetch('server.php', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-type': 'application/json'  //только для JSON
+            //     },
+            //     body: JSON.stringify(object) // или formData
+            // })
+            // .then(data => data.text())
             .then(data => {
                 console.log(data);
                 showThanksModal(message.success);
