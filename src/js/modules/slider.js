@@ -1,12 +1,12 @@
-function slider() {
+function slider({container, slidesSelector, nextArrow, prevArrow, totalCounter, currentCounter, wrapper, field}) {
         //slider
 
-        const slides = document.querySelectorAll('.offer__slide'),
-        currentNum = document.querySelector('#current'),
-        totalNum = document.querySelector('#total'),
-        prevBtn = document.querySelector('.offer__slider-prev'),
-        nextBtn = document.querySelector('.offer__slider-next'),
-        sliderSection = document.querySelector('.offer__slider'),
+        const slides = document.querySelectorAll(slidesSelector),
+        currentNum = document.querySelector(currentCounter),
+        totalNum = document.querySelector(totalCounter),
+        prevBtn = document.querySelector(prevArrow),
+        nextBtn = document.querySelector(nextArrow),
+        sliderSection = document.querySelector(container),
         dotsWrapper = document.createElement('div');
     let index = 0,
     transformCount = 0;
@@ -54,8 +54,8 @@ function slider() {
     //     refreshNumber();
     // });
 
-    document.querySelector('.offer__slider-wrapper').style.overflow = 'hidden';
-    const sliderInner = document.querySelector('.offer__slider-inner');
+    document.querySelector(wrapper).style.overflow = 'hidden';
+    const sliderInner = document.querySelector(field);
 
     sliderInner.style.cssText = `
     display: flex;

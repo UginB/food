@@ -12,12 +12,21 @@ import {openModal} from './modules/modal';
 document.addEventListener('DOMContentLoaded', () => {
     const modalTimer = setTimeout(() => openModal('.modal', modalTimer), 50000);
 
-    tabs();
+    tabs('.tabheader__item', '.tabheader__items', '.tabcontent', 'tabheader__item_active');
     modal('[data-modal]', '.modal', modalTimer);
-    timer();
+    timer('.timer', '2021-8-11');
     cards();
     calc();
     forms('form', modalTimer);
-    slider();
+    slider({
+        container: '.offer__slider',
+        nextArrow: '.offer__slider-next',
+        prevArrow: '.offer__slider-prev',
+        totalCounter: '#total',
+        currentCounter: '#current',
+        slides: '.offer__slide',
+        wrapper: '.offer__slider-wrapper',
+        field: '.offer__slider-inner',
+    });
     
 });

@@ -1,7 +1,5 @@
-function timer() {
+function timer(id, deadline) {
     //timer
-
-    const deadline = '2021-8-11';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()), //дает количество миллисекунд
@@ -50,7 +48,7 @@ function timer() {
         }
     }
 
-    setClock('.timer', deadline);
+    setClock(id, deadline);
 }
 
 export default timer;

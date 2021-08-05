@@ -1,3 +1,5 @@
+import {getResources} from "./services/services";
+
 function cards() {
     // cards
 
@@ -43,16 +45,6 @@ function cards() {
     // new Card('.menu .container', "img/tabs/elite.jpg", "elite",'Меню “Премиум”', 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!', 550).render();
 
     // new Card('.menu .container', "img/tabs/post.jpg", "post", 'Меню "Постное"', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', 430).render();    
-
-    const getResources = async (url) => {
-        const res = await fetch(url);
-        
-        if(!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
-
-        return await res.json();
-    }
 
     getResources('http://localhost:3000/menu')
     .then(data => {
